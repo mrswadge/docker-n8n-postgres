@@ -1,0 +1,17 @@
+# Environment files
+.env
+
+# Data directories (if using local bind mounts instead of named volumes)
+postgres_data/
+n8n_data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
