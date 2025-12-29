@@ -212,13 +212,19 @@ To backup your data:
 # Stop containers
 docker compose down
 
+# List volumes to find exact names (includes project prefix)
+docker volume ls | grep -E "n8n_data|postgres_data"
+
 # Backup volumes (example using tar)
-docker run --rm -v n8n-postgres_n8n_data:/data -v $(pwd):/backup ubuntu tar czf /backup/n8n-backup.tar.gz /data
-docker run --rm -v n8n-postgres_postgres_data:/data -v $(pwd):/backup ubuntu tar czf /backup/postgres-backup.tar.gz /data
+# Replace volume names with actual names from previous command
+docker run --rm -v docker-n8n-postgres_n8n_data:/data -v $(pwd):/backup ubuntu tar czf /backup/n8n-backup.tar.gz /data
+docker run --rm -v docker-n8n-postgres_postgres_data:/data -v $(pwd):/backup ubuntu tar czf /backup/postgres-backup.tar.gz /data
 
 # Start containers
 docker compose up -d
 ```
+
+**Note:** Docker Compose prefixes volume names with the project directory name. If your folder is named differently, adjust the volume names accordingly.
 
 ## Common Operations
 
@@ -253,6 +259,17 @@ docker compose restart
 docker compose pull
 docker compose up -d
 ```
+
+**Version Pinning:** By default, this setup uses the `latest` tag for n8n, which automatically pulls the newest version. For production environments, consider pinning to a specific version:
+
+```yaml
+# In docker-compose.yml, change:
+image: n8nio/n8n:latest
+# To a specific version:
+image: n8nio/n8n:1.20.0
+```
+
+Check available versions at: https://hub.docker.com/r/n8nio/n8n/tags
 
 ### Access PostgreSQL Database
 
